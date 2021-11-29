@@ -17,8 +17,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class SustituirPalabraTests {
 
-    private Editor miEditor;
     private AbstractSingleLinkedListImpl<String> miLista;
+    Editor editor = new Editor();
 
     private String serialize(Editor editor) throws EmptyCollectionException{
         String edit="";
@@ -35,13 +35,29 @@ public class SustituirPalabraTests {
     @DisplayName("Caso de prueba 1")
     @Test
     public void test_sustituirPalabraEditorVacio(){
-        Editor editor = new Editor();
+        this.editor = new Editor();
         assertThrows(EmptyCollectionException.class, () -> {
-            editor.sustituirPalabra("","");
+            editor.sustituirPalabra("hola","hello");
         });
     }
 
     @DisplayName("Caso de prueba 3")
+    @ParameterizedTest(name = "{index} => palabra={0}, sustituto={1}")
+    @CsvSource(value = {
+            "hola:hello"
+    },
+            delimiter = ':')
+
+    public void test_sustituirPalabraCambio(String palabra, String sustituto) throws EmptyCollectionException{
+        this.editor = new Editor();
+        editor.leerFichero("src/test/sustituirPalabra.txt");
+        String previo = this.serialize(editor);
+        editor.sustituirPalabra(palabra,sustituto);
+        String posterior = this.serialize(editor);
+
+    }
+
+    @DisplayName("Caso de prueba 4")
     @ParameterizedTest(name = "{index} => palabra={0}, sustituto={1}")
     @CsvSource(value = {
             "world:mundo"
@@ -49,11 +65,11 @@ public class SustituirPalabraTests {
             delimiter = ':')
 
     public void test_sustituirPalabraNoCambio(String palabra, String sustituto) throws EmptyCollectionException{
-        Editor editor = new Editor();
-        editor.leerFichero("palabras.txt");
-        String previo = this.serialize(editor);
-        editor.sustituirPalabra(palabra,sustituto);
-        String posterior = this.serialize(editor);
+        this.editor = new Editor();
+        this.editor.leerFichero("src/sustituirPalabra.txt");
+        String previo = serialize(this.editor);
+        this.editor.sustituirPalabra(palabra,sustituto);
+        String posterior = serialize(this.editor);
         assertEquals(previo, posterior);
     }
 
