@@ -26,52 +26,74 @@ public class SustituirPalabraTests {
         if (editor.size()>0) {
             while (i <= editor.size()) {
                 edit += editor.getLinea(i).toString();
-                edit +=":";
+                i++;
             }
         }
         return edit;
     }
 
     @DisplayName("Caso de prueba 1")
-    @Test
-    public void test_sustituirPalabraEditorVacio(){
+    @ParameterizedTest(name = "{index} => palabra={0}, sustituto={1}, esperado={2}")
+    @CsvSource(value = {
+            "hola:hello:Excepcion"
+    },
+            delimiter = ':')
+
+    public void test_sustituirPalabraEditorVacio(String palabra, String sustituto, String esperado){
         this.editor = new Editor();
         assertThrows(EmptyCollectionException.class, () -> {
-            editor.sustituirPalabra("hola","hello");
+            editor.sustituirPalabra(palabra,sustituto);
         });
     }
 
     @DisplayName("Caso de prueba 3")
-    @ParameterizedTest(name = "{index} => palabra={0}, sustituto={1}")
+    @ParameterizedTest(name = "{index} => palabra={0}, sustituto={1}, esperado={2}")
     @CsvSource(value = {
-            "hola:hello"
+            "hola:hello:[hello]"
     },
             delimiter = ':')
 
-    public void test_sustituirPalabraCambio(String palabra, String sustituto) throws EmptyCollectionException{
+    public void test_sustituirPalabraCambio(String palabra, String sustituto, String esperado) throws EmptyCollectionException{
         this.editor = new Editor();
-        editor.leerFichero("src/test/sustituirPalabra.txt");
-        String previo = this.serialize(editor);
-        editor.sustituirPalabra(palabra,sustituto);
+        this.editor.leerFichero("src/sustituirPalabra1palabra.txt");
+        this.editor.sustituirPalabra(palabra,sustituto);
         String posterior = this.serialize(editor);
+        assertEquals(posterior, esperado);
 
     }
 
     @DisplayName("Caso de prueba 4")
     @ParameterizedTest(name = "{index} => palabra={0}, sustituto={1}")
     @CsvSource(value = {
-            "world:mundo"
+            "mundo:world"
     },
             delimiter = ':')
 
     public void test_sustituirPalabraNoCambio(String palabra, String sustituto) throws EmptyCollectionException{
         this.editor = new Editor();
-        this.editor.leerFichero("src/sustituirPalabra.txt");
+        this.editor.leerFichero("src/sustituirPalabra1palabra.txt");
         String previo = serialize(this.editor);
         this.editor.sustituirPalabra(palabra,sustituto);
         String posterior = serialize(this.editor);
         assertEquals(previo, posterior);
     }
+
+    @DisplayName("Caso de prueba 5")
+    @ParameterizedTest(name = "{index} => palabra={0}, sustituto={1}, esperado={2}")
+    @CsvSource(value = {
+            "mundo:world:[hola][world]"
+    },
+            delimiter = ':')
+
+    public void test_sustituirPalabraCambioFinal(String palabra, String sustituto, String esperado) throws EmptyCollectionException{
+        this.editor = new Editor();
+        this.editor.leerFichero("src/sustituirPalabra2palabras.txt");
+        this.editor.sustituirPalabra(palabra,sustituto);
+        String posterior = this.serialize(editor);
+        assertEquals(posterior, esperado);
+
+    }
+
 
 
 
