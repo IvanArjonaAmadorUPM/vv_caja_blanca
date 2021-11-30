@@ -174,8 +174,7 @@ public class Editor {
 	 */
 	public void sustituirPalabra(String palabra, String nuevaPalabra) {
 		if (this.editor.size() > 0) {
-			AbstractSingleLinkedListImpl<AbstractSingleLinkedListImpl<String>> nuevoEditor = 
-					new SingleLinkedListImpl<AbstractSingleLinkedListImpl<String>>();
+			AbstractSingleLinkedListImpl<AbstractSingleLinkedListImpl<String>> nuevoEditor = new SingleLinkedListImpl<AbstractSingleLinkedListImpl<String>>();
 			int i=1;
 			do {
 				AbstractSingleLinkedListImpl<String> aux = new SingleLinkedListImpl<String>();
