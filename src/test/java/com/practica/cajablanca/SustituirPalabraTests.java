@@ -17,7 +17,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class SustituirPalabraTests {
 
-    private AbstractSingleLinkedListImpl<String> miLista;
     Editor editor = new Editor();
 
     private String serialize(Editor editor) throws EmptyCollectionException{
@@ -63,13 +62,13 @@ public class SustituirPalabraTests {
     }
 
     @DisplayName("Caso de prueba 4")
-    @ParameterizedTest(name = "{index} => palabra={0}, sustituto={1}")
+    @ParameterizedTest(name = "{index} => palabra={0}, sustituto={1}, esperado={2}")
     @CsvSource(value = {
-            "mundo:world"
+            "mundo:world:[hola]"
     },
             delimiter = ':')
 
-    public void test_sustituirPalabraNoCambio(String palabra, String sustituto) throws EmptyCollectionException{
+    public void test_sustituirPalabraNoCambio(String palabra, String sustituto, String esperado) throws EmptyCollectionException{
         this.editor = new Editor();
         this.editor.leerFichero("src/sustituirPalabra1palabra.txt");
         String previo = serialize(this.editor);
