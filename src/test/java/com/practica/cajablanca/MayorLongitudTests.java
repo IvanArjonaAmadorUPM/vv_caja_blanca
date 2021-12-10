@@ -30,7 +30,7 @@ public class MayorLongitudTests {
     @Test
     public void test_MayorLongitud3() throws EmptyCollectionException {
         editor.leerFichero("src/archivoVacio.txt");
-        assertEquals("", editor.mayorLongitud());
+        assertEquals(null, editor.mayorLongitud());
     }
 
 
